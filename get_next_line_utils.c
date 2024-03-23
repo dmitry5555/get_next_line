@@ -3,66 +3,56 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmitrylarionov <dmitrylarionov@student.    +#+  +:+       +#+        */
+/*   By: dlariono <dlariono@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/29 19:09:41 by dmitrylario       #+#    #+#             */
-/*   Updated: 2023/04/30 20:22:51 by dmitrylario      ###   ########.fr       */
+/*   Created: 2023/05/07 16:48:36 by dlariono          #+#    #+#             */
+/*   Updated: 2023/05/07 16:48:38 by dlariono         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *a)
+static size_t	ft_strlen(const char *s)
 {
-	int	i;
+	size_t	sz;
+	int		i;
 
 	i = 0;
-	while (a[i])
+	sz = 0;
+	while (s[i])
+	{
 		i++;
-	return (i);
+		sz++;
+	}
+	return (sz);
 }
 
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
+static	void	*ft_memset(void *b, int c, size_t len)
 {
-	size_t	src_size;
-	size_t	i;
+	unsigned char	*val;
+	int				i;
 
-	src_size = ft_strlen(src);
 	i = 0;
-	if (dstsize != 0)
+	val = (unsigned char *)b;
+	while (len > 0)
 	{
-		while (src[i] && i < dstsize - 1)
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
+		val[i++] = (unsigned char)c;
+		len--;
 	}
-	return (src_size);
+	return (b);
 }
 
-size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
+void	*ft_calloc(size_t count, size_t size)
 {
-	size_t	i;
-	size_t	l;
+	void	*mem;
+	int		i;
 
-	if (!dst && dstsize == 0)
-		return (ft_strlen(src));
 	i = 0;
-	l = ft_strlen(dst);
-	if (dstsize <= ft_strlen(dst))
-	{
-		return (ft_strlen(src) + dstsize);
-	}
-	while (src[i] && l < dstsize - 1)
-	{
-		dst[l] = src[i];
-		l++;
-		i++;
-	}
-	dst[l] = '\0';
-	return (ft_strlen(dst) + ft_strlen(&src[i]));
+	mem = malloc(count * size);
+	if (mem == NULL)
+		return (NULL);
+	ft_memset(mem, '\0', (count * size));
+	return (mem);
 }
 
 char	*ft_strjoin(char *s1, char *s2)
@@ -75,7 +65,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	n = 0;
 	if (s1 == NULL)
 		return (s2);
-	newstring = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	newstring = malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
 	if (newstring == NULL)
 		return (NULL);
 	while (s1[i])
